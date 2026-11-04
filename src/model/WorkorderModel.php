@@ -33,4 +33,29 @@ class WorkorderModel extends DB
         $stmt->bindParam(':repaircost', $data['repaircost']);
         $stmt->execute();
     }
+
+    public function showAll() {
+        $sql = '
+            SELECT 
+                ID,
+                firstname,
+                lastname,
+                phone,
+                brand,
+                modell,
+                description,
+                checkindate,
+                checkoutdate,
+                repaircost,
+                status
+            FROM
+                workorder
+            ORDER BY
+                ID DESC
+        ';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
 }

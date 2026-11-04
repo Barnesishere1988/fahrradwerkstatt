@@ -20,4 +20,10 @@ class WorkorderController
             "msg" => $result];
         }
     }
+
+    public function showAll()
+    {
+        $workorder = new WorkorderModel();
+        return $workorder->showAll();
+    }
 }

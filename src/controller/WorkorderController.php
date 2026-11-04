@@ -21,6 +21,30 @@ class WorkorderController
         }
     }
 
+    public function edit(array $data)
+    {
+        $result = WorkorderRequests::validate($data);
+        if ($result === true) {
+            $workorder = new WorkorderModel();
+
+            if($workorder->searchById($data['id']) != false) {
+
+            $workorder->edit($data);
+            return [
+            "type" => "success",    
+            "msg" => "Auftrag erfolgreich bearbeitet"];
+            } else {
+                return [
+                "type" => "error",
+                "msg" => "Fehler beim Speichern"];
+            }
+        } else {
+            return [
+            "type" => "error",    
+            "msg" => $result];
+        }
+    }
+
     public function showAll()
     {
         $workorder = new WorkorderModel();
@@ -55,5 +79,10 @@ class WorkorderController
     {
         $workorder = new WorkorderModel();
         $workorder->delete($data);
+    }
+
+    public function showwithId($id) {
+        $workorder = new WorkorderModel();
+        return $workorder->searchById($id);
     }
 }

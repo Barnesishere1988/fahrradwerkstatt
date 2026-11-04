@@ -34,6 +34,39 @@ class WorkorderModel extends DB
         $stmt->execute();
     }
 
+    public function edit($data) {
+        $data['repaircost'] = str_replace(',', '.', $data['repaircost']);
+        $sql = '
+            UPDATE 
+                workorder 
+            SET
+                firstname = :firstname,
+                lastname = :lastname,
+                phone = :phone,
+                brand = :brand,
+                modell = :modell,
+                description = :description,
+                checkindate = :checkindate,
+                checkoutdate = :checkoutdate,
+                repaircost = :repaircost
+            WHERE
+                ID = :id
+        ';
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':firstname', $data['firstname']);
+        $stmt->bindParam(':lastname', $data['lastname']);
+        $stmt->bindParam(':phone', $data['phone']);
+        $stmt->bindParam(':brand', $data['brand']);
+        $stmt->bindParam(':modell', $data['modell']);
+        $stmt->bindParam(':description', $data['description']);
+        $stmt->bindParam(':checkindate', $data['checkindate']);
+        $stmt->bindParam(':checkoutdate', $data['checkoutdate']);
+        $stmt->bindParam(':repaircost', $data['repaircost']);
+        $stmt->bindParam(':id', $data['id']);
+        $stmt->execute();
+    }
+
     public function showAll() {
         $sql = '
             SELECT 
@@ -84,7 +117,7 @@ class WorkorderModel extends DB
         $stmt->bindParam(':id', $search);
         $stmt->execute();
 
-        return $stmt->fetchAll();
+        return $stmt->fetch();
     }
 
        public function searchByName($search) {
@@ -145,7 +178,7 @@ class WorkorderModel extends DB
 
     public function delete($data)
     {
-        $sql = 'DELETE FROm workorder WHERE id = :id';
+        $sql = 'DELETE FROM workorder WHERE id = :id';
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':id', $data['id']);
         $stmt->execute();

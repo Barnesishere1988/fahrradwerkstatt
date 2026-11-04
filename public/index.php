@@ -100,7 +100,7 @@ ob_start();
                         <td>
                             <?= desc_status($workorder['status']) ?? '-' ?></td>
                         <td>
-                            <a href="/edit/<?= $workorder['ID'] ?>" class="btn btn-primary btn-sm">Bearbeiten</a>
+                            <a href="/editworkorder.php?id=<?= $workorder['ID'] ?>" class="btn btn-primary btn-sm">Bearbeiten</a>
                             <?php if($workorder['status'] == 0) : ?>
                             <form method="post">
                                 <input type="hidden" name="id" value="<?= $workorder['ID'] ?>">

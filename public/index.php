@@ -8,6 +8,10 @@ if(isset($_POST['delete'])) {
     $wo->delete($_POST);
 }
 
+if (isset($_POST['statuschange'])) {
+    $wo->statuschange($_POST);
+}
+
 if(isset($_GET['category'])) {
     $workorders = $wo->showSearch($_GET);
 } elseif(isset($_GET['filter'])) {
@@ -78,12 +82,13 @@ ob_start();
             <th scope="col">~ Kosten</th>
             <th scope="col">Status</th>
             <th scope="col">Aktionen</th>
+            <th scope="col">Status ändern</th>
             </tr>
         </thead>
         <tbody>
             <?php if (count($workorders) == 0) : ?>
                 <tr>
-                    <td colspan="10" class="text-center">Keine Aufträge vorhanden</td>
+                    <td colspan="11" class="text-center">Keine Aufträge vorhanden</td>
                 </tr>
             <?php else : ?>
                 <?php foreach ($workorders as $workorder) : ?>
@@ -106,6 +111,32 @@ ob_start();
                                 <input type="hidden" name="id" value="<?= $workorder['ID'] ?>">
                                 <button type="submit" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Soll dieser Eintrag wirklich gelöscht werden?');">Löschen</a>
                             </form>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if ($workorder['status'] == 0) : ?>
+                                <form method="post">
+                                    <input type="hidden" name="id" value="<?= $workorder['ID'] ?>">
+                                    <button type="submit" name="statuschange" class="btn btn-secondary" value="inwork">In Arbeit</button>
+                                </form>
+                            <?php endif; ?>
+                            <?php if ($workorder['status'] == 1) : ?>
+                                <form method="post">
+                                    <input type="hidden" name="id" value="<?= $workorder['ID'] ?>">
+                                    <button type="submit" name="statuschange" class="btn btn-secondary" value="open">Offen</button>
+                                </form>
+                                
+                                <form method="post">
+                                    <input type="hidden" name="id" value="<?= $workorder['ID'] ?>">
+                                    <button type="submit" name="statuschange" class="btn btn-success" value="done">Abgeschlossen</button>
+                                </form>
+                            <?php endif; ?>
+                            
+                            <?php if ($workorder['status'] == 2) : ?>
+                                <form method="post">
+                                    <input type="hidden" name="id" value="<?= $workorder['ID'] ?>">
+                                    <button type="submit" name="statuschange" class="btn btn-success" value="given">Abgeholt</button>
+                                </form>
                             <?php endif; ?>
                         </td>
                     </tr>

@@ -183,4 +183,20 @@ class WorkorderModel extends DB
         $stmt->bindParam(':id', $data['id']);
         $stmt->execute();
     }
+
+    public function statuschange($id, $status) {
+        $sql = '
+            UPDATE 
+                workorder 
+            SET
+                status = :status
+            WHERE
+                ID = :id
+        ';
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+    }
 }

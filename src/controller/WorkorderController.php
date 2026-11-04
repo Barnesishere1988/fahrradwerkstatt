@@ -85,4 +85,20 @@ class WorkorderController
         $workorder = new WorkorderModel();
         return $workorder->searchById($id);
     }
+
+    public function statuschange($data) {
+        $workorder = new WorkorderModel();
+        if($data['statuschange'] == 'inwork') {
+            $workorder->statuschange($data['id'], 1);
+        }
+        if($data['statuschange'] == 'open') {
+            $workorder->statuschange($data['id'], 0);
+        }
+        if($data['statuschange'] == 'done') {
+            header('Location: closeworkorder.php?id=' . $data['id']);
+        }
+        if($data['statuschange'] == 'given') {
+            $workorder->statuschange($data['id'], 3);
+        }
+    }
 }

@@ -58,4 +58,88 @@ class WorkorderModel extends DB
 
         return $stmt->fetchAll();
     }
+
+    public function searchById($search) {
+        $sql = '
+            SELECT 
+                ID,
+                firstname,
+                lastname,
+                phone,
+                brand,
+                modell,
+                description,
+                checkindate,
+                checkoutdate,
+                repaircost,
+                status
+            FROM
+                workorder
+            WHERE
+                ID = :id
+            ORDER BY
+                ID DESC
+        ';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $search);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+       public function searchByName($search) {
+        $sql = "
+            SELECT 
+                ID,
+                firstname,
+                lastname,
+                phone,
+                brand,
+                modell,
+                description,
+                checkindate,
+                checkoutdate,
+                repaircost,
+                status
+            FROM
+                workorder
+            WHERE
+                CONCAT_WS(' ', firstname, lastname) LIKE :search
+            ORDER BY
+                ID DESC
+        ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+        public function searchByFilter($search) {
+        $sql = '
+            SELECT 
+                ID,
+                firstname,
+                lastname,
+                phone,
+                brand,
+                modell,
+                description,
+                checkindate,
+                checkoutdate,
+                repaircost,
+                status
+            FROM
+                workorder
+            WHERE
+                status = :status
+            ORDER BY
+                ID DESC
+        ';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':status', $search);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
 }

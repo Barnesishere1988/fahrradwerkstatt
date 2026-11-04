@@ -52,4 +52,29 @@ class WorkorderRequests
         }
         return true;
     }
+
+    public static function validateSearch($data): bool
+    {
+        if(in_array($data['category'], ['id', 'person'], true)) {
+            
+            if($data['phrase'] != '') {
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
+    public static function validateFilter($data): bool
+    {
+        if(is_numeric($data['filter'])
+            && $data['filter'] >= 0
+            && $data['filter'] <= 3) {
+                return true;
+        }
+
+        return false;
+    }
 }

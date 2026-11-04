@@ -26,4 +26,28 @@ class WorkorderController
         $workorder = new WorkorderModel();
         return $workorder->showAll();
     }
+
+    public function showSearch($data)
+    {
+        $result = WorkorderRequests::validateSearch($data);
+        if ($result === false) {
+            return [];
+        }
+        $workorder = new WorkorderModel();
+        if($data['category'] == 'id') {
+            return $workorder->searchById($data['phrase']);
+        } else {
+            return $workorder->searchByName($data['phrase']);
+        }
+    }
+
+    public function showFilter($data)
+    {
+        $result = WorkorderRequests::validateFilter($data);
+        if ($result === false) {
+            return $this->showAll();
+        }
+        $workorder = new WorkorderModel();
+        return $workorder->searchbyFilter($data['filter']);
+    }
 }

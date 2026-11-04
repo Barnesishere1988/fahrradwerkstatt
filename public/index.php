@@ -3,12 +3,65 @@
 include (__DIR__ . '/../src/controller/WorkorderController.php');
 
 $wo = new WorkorderController();
-$workorders = $wo->showAll();
+
+
+
+if(isset($_GET['category'])) {
+    $workorders = $wo->showSearch($_GET);
+} elseif(isset($_GET['filter'])) {
+    $workorders = $wo->showFilter($_GET);
+} else {
+    $workorders = $wo->showAll();
+}
+
+function desc_status($status) {
+    switch($status) {
+        case 0:
+            return "Offen";
+        case 1:
+            return "In Bearbeitung";
+            break;
+        case 2:
+            return "Abgeschlossen";
+        case 3:
+            return "Abgeholt";
+            break;
+        default:
+            return "unbekannt";
+            break;
+    }
+}
 ?>
 
 <?php 
 ob_start();
 ?>
+<div class="row">
+    <div class="col">
+        <form method="GET">
+            <label for="filter" class="form-label">Filter</label>
+            <select name="filter" id="filter" onchange="this.form.submit()">
+                <option value="">Alle</option>
+                <option value="0" <?= isset($_GET['filter']) && $_GET['filter'] == 0 ? 'selected' : '' ?>>Offen</option>
+                <option value="1" <?= isset($_GET['filter']) && $_GET['filter'] == 1 ? 'selected' : '' ?>>In Bearbeitung</option>
+                <option value="2" <?= isset($_GET['filter']) && $_GET['filter'] == 2 ? 'selected' : '' ?>>Abgeschlossen</option>
+                <option value="3" <?= isset($_GET['filter']) && $_GET['filter'] == 3 ? 'selected' : '' ?>>Abgeholt</option>
+            </select>
+        </form>
+    </div>
+    <div class="col text-end">
+        <form method="GET">
+            <select name="category" id="category">
+                <option value="id">Auftragsnummer</option>
+                <option value="person">Kundenname</option>
+            </select>
+            <input type="text" class="form-input" name="phrase" id="phrase">
+            <button type="submit" class="btn btn-primary">Suchen</button>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
 <table class="table">
         <thead>
             <tr>
@@ -21,6 +74,7 @@ ob_start();
             <th scope="col">Annahmedatum</th>
             <th scope="col">~ Abschlussdatum</th>
             <th scope="col">~ Kosten</th>
+            <th scope="col">Status</th>
             <th scope="col">Aktionen</th>
             </tr>
         </thead>
@@ -42,6 +96,8 @@ ob_start();
                         <td><?= $workorder['checkoutdate'] ?? '-' ?></td>
                         <td><?= $workorder['repaicost'] ?? '-' ?></td>
                         <td>
+                            <?= desc_status($workorder['status']) ?? '-' ?></td>
+                        <td>
                             <a href="/edit/<?= $workorder['ID'] ?>" class="btn btn-primary btn-sm">Bearbeiten</a>
                             <a href="/delete/<?= $workorder['ID'] ?>" class="btn btn-danger btn-sm">Löschen</a>
                         </td>
@@ -50,6 +106,8 @@ ob_start();
             <?php endif; ?>
         </tbody>
         </table>
+    </div>
+</div>
 
 <?php
 

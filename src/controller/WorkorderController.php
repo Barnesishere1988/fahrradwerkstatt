@@ -50,4 +50,10 @@ class WorkorderController
         $workorder = new WorkorderModel();
         return $workorder->searchbyFilter($data['filter']);
     }
+
+    public function delete($data)
+    {
+        $workorder = new WorkorderModel();
+        $workorder->delete($data);
+    }
 }

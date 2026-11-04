@@ -142,4 +142,12 @@ class WorkorderModel extends DB
 
         return $stmt->fetchAll();
     }
+
+    public function delete($data)
+    {
+        $sql = 'DELETE FROm workorder WHERE id = :id';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $data['id']);
+        $stmt->execute();
+    }
 }

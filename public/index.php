@@ -4,7 +4,9 @@ include (__DIR__ . '/../src/controller/WorkorderController.php');
 
 $wo = new WorkorderController();
 
-
+if(isset($_POST['delete'])) {
+    $wo->delete($_POST);
+}
 
 if(isset($_GET['category'])) {
     $workorders = $wo->showSearch($_GET);
@@ -99,7 +101,12 @@ ob_start();
                             <?= desc_status($workorder['status']) ?? '-' ?></td>
                         <td>
                             <a href="/edit/<?= $workorder['ID'] ?>" class="btn btn-primary btn-sm">Bearbeiten</a>
-                            <a href="/delete/<?= $workorder['ID'] ?>" class="btn btn-danger btn-sm">Löschen</a>
+                            <?php if($workorder['status'] == 0) : ?>
+                            <form method="post">
+                                <input type="hidden" name="id" value="<?= $workorder['ID'] ?>">
+                                <button type="submit" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Soll dieser Eintrag wirklich gelöscht werden?');">Löschen</a>
+                            </form>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
